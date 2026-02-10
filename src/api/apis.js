@@ -19,7 +19,7 @@ function getCSRFToken() {
 /**
  * Validate API base URL early (dev safety)
  */
-const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const BASE_URL = import.meta.env.VITE_API_URL;
 
 if (!BASE_URL && import.meta.env.DEV) {
   console.error(
