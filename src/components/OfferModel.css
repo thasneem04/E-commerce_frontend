@@ -1,0 +1,53 @@
+.vm-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.vm-modal {
+  background: #fdfaf6;
+  width: 90%;
+  max-width: 420px;
+  padding: 22px;
+  border-radius: 14px;
+  position: relative;
+  z-index: 10000;
+}
+
+.vm-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.offer-preview {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #e6e1d8;
+  border-radius: 12px;
+  background: #fffdf9;
+}
+
+.offer-preview img {
+  width: 88px;
+  height: 88px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid #e6e1d8;
+  background: #f5f1ea;
+}
+
+.offer-preview-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: #5a4a4a;
+}

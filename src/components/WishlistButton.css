@@ -1,0 +1,27 @@
+.wishlist-btn {
+  border: none;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 999px;
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #6b5a50;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.wishlist-btn:hover {
+  transform: translateY(-1px) scale(1.03);
+  background: #fff;
+}
+
+.wishlist-btn.active {
+  color: #d13a3a;
+}
+
+.wishlist-btn.active svg {
+  fill: currentColor;
+}
