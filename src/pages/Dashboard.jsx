@@ -68,6 +68,9 @@ export default function Dashboard() {
   const [showAlert, setShowAlert] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
   const [deleting, setDeleting] = useState(false);
+  const [showOfferAlert, setShowOfferAlert] = useState(false);
+  const [offerDeleteId, setOfferDeleteId] = useState(null);
+  const [deletingOffer, setDeletingOffer] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [search, setSearch] = useState("");
 
@@ -237,17 +240,6 @@ export default function Dashboard() {
       window.location.href = "/login";
     } catch (err) {
       console.error("Logout failed", err);
-    }
-  };
-
-  // SOFT DELETE (your backend sets is_active = False)
-  const handleDelete = async (id) => {
-    if (!window.confirm("Deactivate this product?")) return;
-    try {
-      await api.delete(`products/${id}/`);
-      fetchProducts();
-    } catch {
-      alert("Delete failed");
     }
   };
 
@@ -510,13 +502,9 @@ export default function Dashboard() {
 
                   <button
                     className="icon-btn danger"
-                    onClick={async () => {
-                      if (!window.confirm("Delete this offer?")) return;
-                      await deleteOffer(o.id);
-                      setOffersLoading(true);
-                      getSellerOffers()
-                        .then((res) => setOffers(res.data))
-                        .finally(() => setOffersLoading(false));
+                    onClick={() => {
+                      setOfferDeleteId(o.id);
+                      setShowOfferAlert(true);
                     }}
                   >
                     <Trash2 size={16} />
@@ -796,6 +784,60 @@ export default function Dashboard() {
                 }}
               >
                 {deleting ? "Deactivating…" : "Deactivate"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {showOfferAlert && (
+        <div className="alert-backdrop">
+          <div className="alert-box">
+            <div className="alert-header">
+              <AlertTriangle size={22} />
+              <h3>Delete Offer</h3>
+
+              <button
+                className="alert-close"
+                onClick={() => setShowOfferAlert(false)}
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <p>
+              This offer will be permanently deleted.
+              <br />
+              This action cannot be undone.
+            </p>
+
+            <div className="alert-actions">
+              <button
+                className="alert-btn cancel"
+                onClick={() => setShowOfferAlert(false)}
+              >
+                Cancel
+              </button>
+
+              <button
+                className="alert-btn danger"
+                disabled={deletingOffer}
+                onClick={async () => {
+                  if (!offerDeleteId) return;
+                  setDeletingOffer(true);
+                  try {
+                    await deleteOffer(offerDeleteId);
+                    setOffersLoading(true);
+                    const res = await getSellerOffers();
+                    setOffers(res.data || []);
+                  } finally {
+                    setOffersLoading(false);
+                    setDeletingOffer(false);
+                    setShowOfferAlert(false);
+                    setOfferDeleteId(null);
+                  }
+                }}
+              >
+                {deletingOffer ? "Deleting..." : "Delete"}
               </button>
             </div>
           </div>
