@@ -87,7 +87,11 @@ export default function ProductModel({ onClose, onSaved, product }) {
         onClose();
       }, delay);
     } catch (err) {
-      alert("Save failed");
+      const message =
+        err?.response?.data?.detail ||
+        JSON.stringify(err?.response?.data || {}) ||
+        "Save failed";
+      alert(message);
       setSaving(false);
     }
   };

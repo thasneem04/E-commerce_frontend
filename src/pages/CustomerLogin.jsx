@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import CustomerNavbar from "../components/CustomerNavbar";
-import api from "../api/apis";
+import api, { bootstrapCsrf } from "../api/apis";
 import { useShop } from "../context/ShopContext";
 import "./CustomerLogin.css";
 
@@ -55,6 +55,7 @@ export default function CustomerLogin() {
           email: form.email,
           password: form.password,
         });
+        await bootstrapCsrf();
         await refreshUserData();
         const redirectTo =
           location.state?.redirectTo && typeof location.state.redirectTo === "string"

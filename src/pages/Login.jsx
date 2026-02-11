@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../api/apis";
+import api, { bootstrapCsrf } from "../api/apis";
 import "./Login.css";
 
 function Login({ onLogin }) {
@@ -23,6 +23,7 @@ function Login({ onLogin }) {
         username: username.trim(),
         password,
       });
+      await bootstrapCsrf();
 
       // ✅ Session cookie is now set by backend
       onLogin();

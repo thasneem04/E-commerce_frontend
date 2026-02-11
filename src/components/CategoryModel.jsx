@@ -16,8 +16,12 @@ export default function CategoryModel({ onClose, onSaved }) {
       await api.post("categories/", { name });
       onSaved();      // refresh category list
       onClose();
-    } catch {
-      alert("Category creation failed");
+    } catch (err) {
+      const message =
+        err?.response?.data?.detail ||
+        JSON.stringify(err?.response?.data || {}) ||
+        "Category creation failed";
+      alert(message);
     } finally {
       setSaving(false);
     }
