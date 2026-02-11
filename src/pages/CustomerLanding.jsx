@@ -25,9 +25,11 @@ export default function CustomerLanding() {
         const payload = res?.data;
         const normalized = Array.isArray(payload)
           ? payload
-          : payload
-            ? [payload]
-            : [];
+          : Array.isArray(payload?.results)
+            ? payload.results
+            : payload
+              ? [payload]
+              : [];
         const visibleOffers = normalized
           .filter((o) => o && o.is_active !== false)
           .sort(
@@ -39,7 +41,10 @@ export default function CustomerLanding() {
       .catch((err) => {
         console.error("Failed to load offers", err);
         setOffers([]);
-        setOffersError("Unable to load offers right now");
+        const detail =
+          err?.response?.data?.detail ||
+          (typeof err?.response?.data === "string" ? err.response.data : "");
+        setOffersError(detail || "Unable to load offers right now");
       })
       .finally(() => setLoadingOffers(false));
   }, []);
@@ -102,9 +107,6 @@ export default function CustomerLanding() {
             <div className="ads-header">
               <h3>Mega Offers</h3>
               <div className="ads-meta">
-                <span className={`ads-debug ${offersError ? "error" : ""}`}>
-                  {offersError ? `offers error: ${offersError}` : `offers loaded: ${offers.length}`}
-                </span>
                 <div className="ads-dots">
                   {offers.map((_, i) => (
                     <button

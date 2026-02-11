@@ -1,25 +1,15 @@
 import api from "./apis";
-import axios from "axios";
-
-const API_BASE_URL = (
-  import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || ""
-).trim();
-
-function publicApiUrl(path) {
-  const base = API_BASE_URL.endsWith("/") ? API_BASE_URL : `${API_BASE_URL}/`;
-  return `${base}${path}`;
-}
 
 export const getSellerOffers = () =>
   api.get("seller/offers/");
 
 export const getPublicOffers = () =>
-  axios.get(publicApiUrl("offers/"), {
+  api.get("offers/", {
     withCredentials: false,
     headers: {
       Accept: "application/json",
     },
-    params: { _ts: Date.now() }, // avoid stale CDN/browser cache on home carousel
+    params: { _ts: Date.now() },
   });
 
 export const addOffer = (data) =>
