@@ -7,13 +7,19 @@ import { useShop } from "../context/ShopContext";
 import "./ProductDetails.css";
 import { ShoppingCart } from "lucide-react";
 
-const mediaBase = import.meta.env.VITE_MEDIA_BASE_URL || "";
+
 
 function resolveImage(path) {
   if (!path) return null;
+
+  // Cloudinary / absolute URL
   if (path.startsWith("http")) return path;
-  return `${mediaBase}${path}`;
+
+  // Fallback (only if old media exists)
+  return `https://e-commercebackend-production-c3a7.up.railway.app${path}`;
 }
+
+
 
 function formatPrice(value) {
   if (value === null || value === undefined || value === "") return "—";
@@ -112,7 +118,9 @@ export default function ProductDetails() {
   const discount = product.has_offer
     ? product.discount_percentage ?? calcDiscount(product.original_price, product.offer_price)
     : null;
-  const mainImage = resolveImage(selectedImage);
+const mainImage = resolveImage(selectedImage);
+
+
 
   return (
     <div className="product-details-page">
@@ -245,7 +253,7 @@ export default function ProductDetails() {
                   {imageUrl ? (
                     <img src={imageUrl} alt={item.name} />
                   ) : (
-                    <div className="related-placeholder">No image</div>
+                    <div className="related-placeholder">No related products</div>
                   )}
                   {item.has_offer && discountPct && (
                     <span className="discount-badge">
