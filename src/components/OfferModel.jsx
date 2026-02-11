@@ -51,6 +51,22 @@ export default function OfferModel({ onClose, onSaved, offer }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.product) return;
+
+    const selectedOriginal = Number(selectedProduct?.original_price);
+    const enteredOffer = Number(form.offer_price);
+    if (!form.offer_price) {
+      alert("Offer price is required");
+      return;
+    }
+    if (
+      Number.isFinite(selectedOriginal) &&
+      Number.isFinite(enteredOffer) &&
+      enteredOffer >= selectedOriginal
+    ) {
+      alert("Offer price must be less than original price");
+      return;
+    }
+
     setSaving(true);
     try {
       const payload = {
@@ -165,6 +181,7 @@ export default function OfferModel({ onClose, onSaved, offer }) {
               placeholder="Offer price"
               value={form.offer_price}
               onChange={handleChange}
+              required
               min="0"
               step="0.01"
             />
