@@ -1,16 +1,16 @@
 import api from "./apis";
 
 export const getSellerOffers = () =>
-  api.get("/seller/offers/");
+  api.get("seller/offers/");
 
 export const getPublicOffers = () =>
-  api.get("/offers/");
+  api.get("offers/");
 
 export const addOffer = (data) =>
-  api.post("/seller/offers/", data);
+  api.post("seller/offers/", data);
 
 export const updateOffer = (id, data) =>
-  api.put(`/seller/offers/${id}/`, data);
+  api.put(`seller/offers/${id}/`, data);
 
 export const deleteOffer = (id) =>
-  api.delete(`/seller/offers/${id}/`);
+  api.delete(`seller/offers/${id}/`);

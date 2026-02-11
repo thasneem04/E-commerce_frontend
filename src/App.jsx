@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import api from "./api/apis";
+import api, { bootstrapCsrf } from "./api/apis";
 
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
@@ -27,8 +27,8 @@ function App() {
 
     const checkSession = async () => {
       try {
-           await api.get("/csrf/");
-        await api.get("/auth/me/");
+        await bootstrapCsrf();
+        await api.get("auth/me/");
         if (mounted) setLoggedIn(true);
       } catch {
         if (mounted) setLoggedIn(false);
