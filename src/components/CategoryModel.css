@@ -1,3 +1,23 @@
+.category-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 12050;
+}
+
+.category-modal {
+  background: #fdfaf6;
+  width: 90%;
+  max-width: 420px;
+  padding: 22px;
+  border-radius: 14px;
+  position: relative;
+  z-index: 12060;
+}
+
 .input-icon {
   display: flex;
   align-items: center;

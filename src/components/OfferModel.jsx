@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { X, Save, BadgePercent, Package, ArrowUpDown } from "lucide-react";
 import api from "../api/apis";
 import { addOffer, updateOffer } from "../api/offerApi";
+import { resolveMediaUrl } from "../utils/media";
 import "./OfferModel.css";
 
 export default function OfferModel({ onClose, onSaved, offer }) {
@@ -69,7 +70,11 @@ export default function OfferModel({ onClose, onSaved, offer }) {
       onSaved();
       onClose();
     } catch (err) {
-      alert("Offer save failed");
+      const message =
+        err?.response?.data?.detail ||
+        JSON.stringify(err?.response?.data || {}) ||
+        "Offer save failed";
+      alert(message);
     } finally {
       setSaving(false);
     }
@@ -120,7 +125,7 @@ export default function OfferModel({ onClose, onSaved, offer }) {
           {selectedProduct?.image && (
             <div className="offer-preview">
               <img
-                src={`${import.meta.env.VITE_MEDIA_BASE_URL}${selectedProduct.image}`}
+                src={resolveMediaUrl(selectedProduct.image)}
                 alt={selectedProduct.name}
               />
               <div className="offer-preview-text">

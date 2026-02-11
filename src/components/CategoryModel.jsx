@@ -28,8 +28,8 @@ export default function CategoryModel({ onClose, onSaved }) {
   };
 
   return (
-    <div className="vm-modal-backdrop">
-      <div className="vm-modal">
+    <div className="category-modal-backdrop">
+      <div className="category-modal">
         <header className="vm-modal-header">
           <h3>Add Category</h3>
           <button className="icon-btn" onClick={onClose}>

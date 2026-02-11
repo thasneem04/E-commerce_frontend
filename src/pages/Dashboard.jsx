@@ -388,13 +388,11 @@ export default function Dashboard() {
               <div className="card" key={p.id}>
                 {p.image && (
                   <img
-                    src={`${import.meta.env.VITE_MEDIA_BASE_URL}${p.image}`}
+                    src={resolveMediaUrl(p.image)}
                     alt={p.name}
                     className="card-image"
                     onClick={() =>
-                      setPreviewImage(
-                        `${import.meta.env.VITE_MEDIA_BASE_URL}${p.image}`,
-                      )
+                      setPreviewImage(resolveMediaUrl(p.image))
                     }
                   />
                 )}
@@ -469,13 +467,11 @@ export default function Dashboard() {
               <div className="card offer-card" key={o.id}>
                 {o.image && (
                   <img
-                    src={`${import.meta.env.VITE_MEDIA_BASE_URL}${o.image}`}
+                    src={resolveMediaUrl(o.image)}
                     alt={o.title}
                     className="offer-image"
                     onClick={() =>
-                      setPreviewImage(
-                        `${import.meta.env.VITE_MEDIA_BASE_URL}${o.image}`,
-                      )
+                      setPreviewImage(resolveMediaUrl(o.image))
                     }
                   />
                 )}

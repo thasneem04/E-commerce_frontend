@@ -9,6 +9,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { getPublicOffers } from "../api/offerApi";
+import { resolveMediaUrl } from "../utils/media";
 import "./CustomerLanding.css";
 
 export default function CustomerLanding() {
@@ -128,7 +129,7 @@ export default function CustomerLanding() {
                         <div className="ad-media">
                           {o.image ? (
                             <img
-                              src={`${import.meta.env.VITE_MEDIA_BASE_URL}${o.image}`}
+                              src={resolveMediaUrl(o.image)}
                               alt={o.title || "Offer"}
                               className="ad-image"
                             />
