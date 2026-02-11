@@ -22,11 +22,13 @@ function App() {
   const [checkingSession, setCheckingSession] = useState(true);
 
   useEffect(() => {
+       
     let mounted = true;
 
     const checkSession = async () => {
       try {
-        await api.get("auth/me/");
+           await api.get("/csrf/");
+        await api.get("/auth/me/");
         if (mounted) setLoggedIn(true);
       } catch {
         if (mounted) setLoggedIn(false);
