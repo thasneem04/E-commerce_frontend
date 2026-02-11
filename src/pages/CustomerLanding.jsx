@@ -15,13 +15,32 @@ import "./CustomerLanding.css";
 export default function CustomerLanding() {
   const [offers, setOffers] = useState([]);
   const [loadingOffers, setLoadingOffers] = useState(true);
+  const [offersError, setOffersError] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
   const [paused, setPaused] = useState(false);
 
   useEffect(() => {
     getPublicOffers()
-      .then((res) => setOffers(res.data))
-      .catch((err) => console.error("Failed to load offers", err))
+      .then((res) => {
+        const payload = res?.data;
+        const normalized = Array.isArray(payload)
+          ? payload
+          : payload
+            ? [payload]
+            : [];
+        const visibleOffers = normalized
+          .filter((o) => o && o.is_active !== false)
+          .sort(
+            (a, b) => Number(a?.display_order || 0) - Number(b?.display_order || 0)
+          );
+        setOffers(visibleOffers);
+        setOffersError("");
+      })
+      .catch((err) => {
+        console.error("Failed to load offers", err);
+        setOffers([]);
+        setOffersError("Unable to load offers right now");
+      })
       .finally(() => setLoadingOffers(false));
   }, []);
 
@@ -108,8 +127,12 @@ export default function CustomerLanding() {
 
               {!loadingOffers && offers.length === 0 && (
                 <div className="ad-item single">
-                  <div className="ad-heading">No offers yet</div>
-                  <div className="ad-subtitle">Check back soon for fresh deals</div>
+                  <div className="ad-heading">
+                    {offersError ? "Offers unavailable" : "No offers yet"}
+                  </div>
+                  <div className="ad-subtitle">
+                    {offersError || "Check back soon for fresh deals"}
+                  </div>
                 </div>
               )}
 
