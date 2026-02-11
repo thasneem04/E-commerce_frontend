@@ -101,15 +101,20 @@ export default function CustomerLanding() {
           <div className="hero-ads">
             <div className="ads-header">
               <h3>Mega Offers</h3>
-              <div className="ads-dots">
-                {offers.map((_, i) => (
-                  <button
-                    key={i}
-                    className={`dot ${i === activeIndex ? "active" : ""}`}
-                    onClick={() => setActiveIndex(i)}
-                    aria-label={`Go to offer ${i + 1}`}
-                  />
-                ))}
+              <div className="ads-meta">
+                <span className={`ads-debug ${offersError ? "error" : ""}`}>
+                  {offersError ? `offers error: ${offersError}` : `offers loaded: ${offers.length}`}
+                </span>
+                <div className="ads-dots">
+                  {offers.map((_, i) => (
+                    <button
+                      key={i}
+                      className={`dot ${i === activeIndex ? "active" : ""}`}
+                      onClick={() => setActiveIndex(i)}
+                      aria-label={`Go to offer ${i + 1}`}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
 

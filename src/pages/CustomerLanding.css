@@ -111,12 +111,35 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
 }
 
 .ads-header h3 {
   font-size: 20px;
   color: #3b2b2b;
   font-weight: 700;
+}
+
+.ads-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ads-debug {
+  font-size: 11px;
+  color: #4d5d7e;
+  background: #edf2ff;
+  border: 1px solid #d5def7;
+  border-radius: 999px;
+  padding: 4px 8px;
+  white-space: nowrap;
+}
+
+.ads-debug.error {
+  color: #8a1f1f;
+  background: #ffeaea;
+  border-color: #f1c7c7;
 }
 
 .ads-dots {
