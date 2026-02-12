@@ -3,6 +3,9 @@
   color: #3b2b2b;
   min-height: 100vh;
   padding-top: 78px;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
 }
 
 /* ================= HERO ================= */
@@ -131,6 +134,7 @@
   letter-spacing: 0.18em;
   color: #5a4a4a;
   padding-bottom: 26px;
+  max-width: min(92vw, 360px);
 }
 
 .scroll-hint::after {
@@ -841,6 +845,19 @@
 
 /* ================= MOBILE (IMPORTANT FIX) ================= */
 @media (max-width: 600px) {
+  .customer-page {
+    padding-bottom: 72px;
+  }
+
+  .home-hero,
+  .logo-intro,
+  .latest-products,
+  .cookware-feature,
+  .appliances-feature,
+  .lion-feature {
+    overflow-x: clip;
+  }
+
   .hero-wrapper {
     padding: 40px 16px;
   }
@@ -959,6 +976,14 @@
 
   .appliances-feature-content p {
     font-size: 17px;
+  }
+
+  .scroll-hint {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    white-space: normal;
+    line-height: 1.35;
+    text-wrap: balance;
   }
 }
 

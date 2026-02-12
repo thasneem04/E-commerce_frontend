@@ -20,6 +20,7 @@
   background-color: var(--vintage-bg);
   border-bottom: 1px solid var(--soft-border);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  overflow-x: clip;
 }
 
 /* offset for fixed navbar */
@@ -30,6 +31,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  min-width: 0;
 }
 
 .customer-logo img {
@@ -49,6 +51,8 @@
   letter-spacing: 0.4px;
   font-family: "Poppins", sans-serif;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 
@@ -173,7 +177,16 @@
   }
 
   .customer-nav-links {
-    gap: 18px;
+    gap: 10px;
+  }
+
+  .nav-item {
+    padding: 8px 10px;
+  }
+
+  .shop-name {
+    max-width: 160px;
+    font-size: 16px;
   }
 
   /* hide text → icons only (clean tablet look) */
@@ -197,6 +210,10 @@
 /* 📱 MOBILE (≤767px) – ENHANCED UI */
 /* ================================================= */
 @media (max-width: 767px) {
+  .customer-navbar {
+    padding: 12px 14px;
+  }
+
   .hamburger {
     display: none;
   }
@@ -206,6 +223,7 @@
   display: inline;
   font-size: 14px;
   font-weight: 600;
+  max-width: calc(100vw - 86px);
 }
 
 
