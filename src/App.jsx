@@ -27,6 +27,11 @@ function App() {
 
     const checkSession = async () => {
       try {
+        const path = window.location.pathname || "";
+        if (!path.startsWith("/seller")) {
+          if (mounted) setCheckingSession(false);
+          return;
+        }
         await bootstrapCsrf();
         await api.get("auth/me/");
         if (mounted) setLoggedIn(true);
