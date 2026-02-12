@@ -234,9 +234,6 @@ export default function Products() {
                   </div>
                   <div className="product-info">
                     <div className="product-name">{p.name}</div>
-                    {p.description && (
-                      <div className="product-desc">{p.description}</div>
-                    )}
                     {Array.isArray(p.size_variants) && p.size_variants.length > 0 && (
                       <div className="product-sizes">
                         {p.size_variants
