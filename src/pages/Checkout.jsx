@@ -23,6 +23,7 @@ export default function Checkout() {
   const [params] = useSearchParams();
   const { customer, loadingShop } = useShop();
   const productId = params.get("productId");
+  const sizeVariantIdParam = params.get("sizeVariantId");
 
   const [product, setProduct] = useState(null);
   const [cartItems, setCartItems] = useState([]);
@@ -49,7 +50,9 @@ export default function Checkout() {
       return;
     }
     if (!customer?.profile_complete) {
-      const target = productId ? `/checkout?productId=${productId}` : "/checkout";
+      const target = productId
+        ? `/checkout?productId=${productId}${sizeVariantIdParam ? `&sizeVariantId=${sizeVariantIdParam}` : ""}`
+        : "/checkout";
       navigate("/customer/profile", { state: { redirectTo: target } });
       return;
     }
@@ -57,7 +60,19 @@ export default function Checkout() {
     if (productId) {
       Promise.all([api.get(`products/${productId}/`), profileReq])
         .then(([productRes, profileRes]) => {
-          setProduct(productRes.data);
+          const fetched = productRes.data || {};
+          if (sizeVariantIdParam) {
+            const found = (fetched.size_variants || []).find(
+              (v) => String(v.id) === String(sizeVariantIdParam)
+            );
+            fetched._selectedSizeVariant = found || null;
+          } else {
+            const firstActive = (fetched.size_variants || []).find(
+              (v) => v.is_active !== false
+            );
+            fetched._selectedSizeVariant = firstActive || null;
+          }
+          setProduct(fetched);
           if (profileRes?.data) {
             setForm((prev) => ({
               ...prev,
@@ -92,7 +107,7 @@ export default function Checkout() {
       })
       .catch(() => setError("Failed to load checkout"))
       .finally(() => setLoading(false));
-  }, [customer, navigate, productId, loadingShop]);
+  }, [customer, navigate, productId, sizeVariantIdParam, loadingShop]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -127,6 +142,7 @@ export default function Checkout() {
       if (productId && product) {
         await api.post("orders/buy-now/", {
           product_id: product.id,
+          size_variant_id: product?._selectedSizeVariant?.id || null,
           quantity: 1,
           ...form,
         });
@@ -153,6 +169,7 @@ export default function Checkout() {
           id: product.id,
           name: product.name,
           image: product.image,
+          size_label: product?._selectedSizeVariant?.size_label || "",
           quantity: 1,
           price,
         },
@@ -161,9 +178,10 @@ export default function Checkout() {
     return (cartItems || []).map((item) => {
       const price = item.has_offer ? item.discounted_price : item.price;
       return {
-        id: item.product?.id,
+        id: `${item.product?.id}-${item.size_variant_id || "base"}`,
         name: item.product?.name,
         image: item.product?.image,
+        size_label: item.size_label || "",
         quantity: item.quantity,
         price,
       };
@@ -291,6 +309,9 @@ export default function Checkout() {
                       <div className="summary-price">
                         {formatPrice(item.price)}
                       </div>
+                      {item.size_label && (
+                        <div className="summary-qty">Size: {item.size_label}</div>
+                      )}
                       <div className="summary-qty">Qty: {item.quantity}</div>
                     </div>
                   </div>

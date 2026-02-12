@@ -408,6 +408,17 @@ export default function Dashboard() {
                   <span>{p.offer_price ? `₹${p.offer_price}` : "No offer"}</span>
                 </p>
 
+                {Array.isArray(p.size_variants) && p.size_variants.length > 0 && (
+                  <p className="icon-text">
+                    <Tag size={14} />
+                    <span>
+                      {p.size_variants
+                        .map((v) => `${v.size_label}: ₹${v.selling_price ?? v.original_price}`)
+                        .join(" | ")}
+                    </span>
+                  </p>
+                )}
+
                 <p
                   className={`icon-text stock ${
                     p.stock <= 5 ? "low stock-alert" : "ok"
@@ -616,6 +627,11 @@ export default function Dashboard() {
                                     <div className="order-item-name">
                                       {it.product_name}
                                     </div>
+                                    {it.size_label && (
+                                      <div className="order-item-category">
+                                        Size: {it.size_label}
+                                      </div>
+                                    )}
                                     {it.category_name && (
                                       <div className="order-item-category">
                                         {it.category_name}

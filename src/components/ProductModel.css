@@ -164,3 +164,40 @@ form {
   cursor: pointer;
   font-weight: 500;
 }
+
+.variant-block {
+  display: grid;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.variant-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.variant-row {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr 1fr 0.8fr auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.variant-row input {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 13px;
+  outline: none;
+}
+
+@media (max-width: 640px) {
+  .variant-row {
+    grid-template-columns: 1fr;
+  }
+}

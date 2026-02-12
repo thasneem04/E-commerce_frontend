@@ -42,6 +42,7 @@ export default function ProductDetails() {
   const [related, setRelated] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [selectedVariantId, setSelectedVariantId] = useState(null);
 
   const images = useMemo(() => {
     if (!product) return [];
@@ -67,6 +68,10 @@ export default function ProductDetails() {
         setProduct(res.data);
         const firstImage = res.data?.image || "";
         setSelectedImage(firstImage);
+        const variants = Array.isArray(res.data?.size_variants)
+          ? res.data.size_variants.filter((v) => v.is_active !== false)
+          : [];
+        setSelectedVariantId(variants.length > 0 ? variants[0].id : null);
       })
       .catch((err) => {
         if (!mounted) return;
@@ -115,8 +120,23 @@ export default function ProductDetails() {
   if (!product) return null;
 
   const selling = product.selling_price ?? product.original_price;
+  const activeVariants = Array.isArray(product.size_variants)
+    ? product.size_variants.filter((v) => v.is_active !== false)
+    : [];
+  const selectedVariant = activeVariants.find((v) => v.id === selectedVariantId) || null;
+  const displaySelling = selectedVariant
+    ? selectedVariant.selling_price ?? selectedVariant.original_price
+    : selling;
+  const displayOriginal = selectedVariant
+    ? selectedVariant.original_price
+    : product.original_price;
+  const displayOffer = selectedVariant ? selectedVariant.offer_price : product.offer_price;
   const discount = product.has_offer
     ? product.discount_percentage ?? calcDiscount(product.original_price, product.offer_price)
+    : null;
+  const variantDiscount = selectedVariant
+    ? selectedVariant.discount_percentage ??
+      calcDiscount(selectedVariant.original_price, selectedVariant.offer_price)
     : null;
 const mainImage = resolveImage(selectedImage);
 
@@ -166,16 +186,38 @@ const mainImage = resolveImage(selectedImage);
         <div className="details-info">
           <h1>{product.name}</h1>
           <div className="details-price">
-            <span className="selling">{formatPrice(selling)}</span>
-            {product.has_offer && (
+            <span className="selling">{formatPrice(displaySelling)}</span>
+            {(selectedVariant ? !!displayOffer : product.has_offer) && (
               <span className="original">
-                {formatPrice(product.original_price)}
+                {formatPrice(displayOriginal)}
               </span>
             )}
-            {product.has_offer && discount && (
-              <span className="discount">{discount}% off</span>
+            {(selectedVariant ? variantDiscount : discount) && (
+              <span className="discount">
+                {(selectedVariant ? variantDiscount : discount)}% off
+              </span>
             )}
           </div>
+
+          {activeVariants.length > 0 && (
+            <div className="size-picker">
+              <div className="size-picker-label">Size</div>
+              <div className="size-options">
+                {activeVariants.map((variant) => (
+                  <button
+                    key={variant.id}
+                    type="button"
+                    className={`size-option ${
+                      selectedVariantId === variant.id ? "active" : ""
+                    }`}
+                    onClick={() => setSelectedVariantId(variant.id)}
+                  >
+                    {variant.size_label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
           <div className="details-meta">
             <span>
@@ -183,8 +225,16 @@ const mainImage = resolveImage(selectedImage);
             </span>
             <span>
               Stock:{" "}
-              <strong className={product.stock > 0 ? "in" : "out"}>
-                {product.stock > 0 ? "In stock" : "Out of stock"}
+              <strong
+                className={
+                  (selectedVariant ? selectedVariant.stock : product.stock) > 0
+                    ? "in"
+                    : "out"
+                }
+              >
+                {(selectedVariant ? selectedVariant.stock : product.stock) > 0
+                  ? "In stock"
+                  : "Out of stock"}
               </strong>
             </span>
           </div>
@@ -198,7 +248,7 @@ const mainImage = resolveImage(selectedImage);
               className="btn-secondary"
               onClick={async () => {
                 try {
-                  await addToCart(product.id, 1);
+                  await addToCart(product.id, 1, selectedVariant?.id || null);
                   navigate("/cart");
                 } catch (err) {
                   if (err?.code === "AUTH_REQUIRED") {
@@ -214,7 +264,10 @@ const mainImage = resolveImage(selectedImage);
             <button
               className="btn-primary"
               onClick={() => {
-                navigate(`/checkout?productId=${product.id}`);
+                const sizeQuery = selectedVariant?.id
+                  ? `&sizeVariantId=${selectedVariant.id}`
+                  : "";
+                navigate(`/checkout?productId=${product.id}${sizeQuery}`);
               }}
             >
               Buy Now

@@ -123,36 +123,45 @@ export function ShopProvider({ children }) {
     }
   };
 
-  const addToCart = async (productId, quantity = 1) => {
+  const addToCart = async (productId, quantity = 1, sizeVariantId = null) => {
     if (!productId) return;
     if (!customer?.authenticated) {
       const err = new Error("AUTH_REQUIRED");
       err.code = "AUTH_REQUIRED";
       throw err;
     }
-    await api.post("cart/add/", { product_id: productId, quantity });
+    await api.post("cart/add/", {
+      product_id: productId,
+      quantity,
+      size_variant_id: sizeVariantId,
+    });
     await refreshCart();
   };
 
-  const updateCart = async (productId, quantity) => {
+  const updateCart = async (productId, quantity, sizeVariantId = null) => {
     if (!productId) return;
     if (!customer?.authenticated) {
       const err = new Error("AUTH_REQUIRED");
       err.code = "AUTH_REQUIRED";
       throw err;
     }
-    await api.put("cart/update/", { product_id: productId, quantity });
+    await api.put("cart/update/", {
+      product_id: productId,
+      quantity,
+      size_variant_id: sizeVariantId,
+    });
     await refreshCart();
   };
 
-  const removeFromCart = async (productId) => {
+  const removeFromCart = async (productId, sizeVariantId = null) => {
     if (!productId) return;
     if (!customer?.authenticated) {
       const err = new Error("AUTH_REQUIRED");
       err.code = "AUTH_REQUIRED";
       throw err;
     }
-    await api.delete(`cart/remove/${productId}/`);
+    const query = sizeVariantId ? `?size_variant_id=${sizeVariantId}` : "";
+    await api.delete(`cart/remove/${productId}/${query}`);
     await refreshCart();
   };
 

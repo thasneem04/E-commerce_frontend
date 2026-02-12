@@ -80,7 +80,7 @@ export default function Cart() {
                 : item.price;
               const lineTotal = Number(price || 0) * Number(item.quantity || 0);
               return (
-                <div className="cart-card" key={item.id || product.id}>
+                <div className="cart-card" key={item.id || `${product.id}-${item.size_variant_id || "base"}`}>
                   <div className="cart-media">
                     <WishlistButton productId={product.id} className="card-heart" />
                     {imageUrl ? (
@@ -91,12 +91,19 @@ export default function Cart() {
                   </div>
                   <div className="cart-info">
                     <div className="cart-name">{product.name}</div>
+                    {item.size_label && (
+                      <div className="cart-line">Size: {item.size_label}</div>
+                    )}
                     <div className="cart-price">{formatPrice(price)}</div>
                     <div className="cart-qty">
                       <button
                         type="button"
                         onClick={() =>
-                          updateCart(product.id, Math.max(1, item.quantity - 1)).catch(
+                          updateCart(
+                            product.id,
+                            Math.max(1, item.quantity - 1),
+                            item.size_variant_id || null
+                          ).catch(
                             (err) => {
                               if (err?.code === "AUTH_REQUIRED") {
                                 navigate("/customer/login");
@@ -112,12 +119,16 @@ export default function Cart() {
                       <button
                         type="button"
                         onClick={() =>
-                          updateCart(product.id, item.quantity + 1).catch((err) => {
-                            if (err?.code === "AUTH_REQUIRED") {
-                              navigate("/customer/login");
-                              return;
-                            }
-                          })
+                          updateCart(
+                            product.id,
+                            item.quantity + 1,
+                            item.size_variant_id || null
+                          ).catch((err) => {
+                              if (err?.code === "AUTH_REQUIRED") {
+                                navigate("/customer/login");
+                                return;
+                              }
+                            })
                         }
                       >
                         +
@@ -130,7 +141,10 @@ export default function Cart() {
                       className="cart-remove"
                       type="button"
                       onClick={() =>
-                        removeFromCart(product.id).catch((err) => {
+                        removeFromCart(
+                          product.id,
+                          item.size_variant_id || null
+                        ).catch((err) => {
                           if (err?.code === "AUTH_REQUIRED") {
                             navigate("/customer/login");
                             return;
