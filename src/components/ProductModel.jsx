@@ -140,19 +140,21 @@ export default function ProductModel({ onClose, onSaved, product }) {
       formData.append("stock", form.stock);
       formData.append("description", form.description || "");
       formData.append("is_active", form.is_active);
-      formData.append(
-        "size_variants_payload",
-        JSON.stringify(
-          (form.size_variants || []).map((v, index) => ({
-            size_label: String(v.size_label || "").trim(),
-            original_price: v.original_price,
-            offer_price: v.offer_price === "" ? null : v.offer_price,
-            stock: Number(v.stock || 0),
-            display_order: Number(v.display_order ?? index),
-            is_active: v.is_active !== false,
-          }))
-        )
-      );
+      if (Array.isArray(form.size_variants) && form.size_variants.length > 0) {
+        formData.append(
+          "size_variants_payload",
+          JSON.stringify(
+            form.size_variants.map((v, index) => ({
+              size_label: String(v.size_label || "").trim(),
+              original_price: v.original_price,
+              offer_price: v.offer_price === "" ? null : v.offer_price,
+              stock: Number(v.stock || 0),
+              display_order: Number(v.display_order ?? index),
+              is_active: v.is_active !== false,
+            }))
+          )
+        );
+      }
       if (image) formData.append("image", image);
 
       if (product) {
