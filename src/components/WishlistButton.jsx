@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "./WishlistButton.css";
 
 export default function WishlistButton({ productId, className }) {
-  const { wishlistIds, toggleWishlist, customer } = useShop();
+  const { wishlistIds, toggleWishlist } = useShop();
   const navigate = useNavigate();
   const isWishlisted = wishlistIds.has(productId);
 
@@ -14,10 +14,6 @@ export default function WishlistButton({ productId, className }) {
     toggleWishlist(productId).catch((err) => {
       if (err?.code === "AUTH_REQUIRED") {
         navigate("/customer/login");
-        return;
-      }
-      if (err?.code === "PROFILE_REQUIRED") {
-        navigate("/customer/profile");
         return;
       }
     });

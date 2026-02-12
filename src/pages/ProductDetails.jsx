@@ -205,9 +205,6 @@ const mainImage = resolveImage(selectedImage);
                     navigate("/customer/login");
                     return;
                   }
-                  if (err?.code === "PROFILE_REQUIRED") {
-                    navigate("/customer/profile");
-                  }
                 }
               }}
             >

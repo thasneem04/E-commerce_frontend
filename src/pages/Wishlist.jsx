@@ -53,26 +53,6 @@ export default function Wishlist() {
     );
   }
 
-  if (!customer?.profile_complete) {
-    return (
-      <div className="wishlist-page">
-        <CustomerNavbar />
-        <div className="wishlist-wrapper">
-          <div className="wishlist-empty">
-            Please complete your profile to use the wishlist.
-            <button
-              className="wishlist-cta"
-              type="button"
-              onClick={() => navigate("/customer/profile")}
-            >
-              Complete Profile
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="wishlist-page">
       <CustomerNavbar />
@@ -123,9 +103,6 @@ export default function Wishlist() {
                         if (err?.code === "AUTH_REQUIRED") {
                           navigate("/customer/login");
                           return;
-                        }
-                        if (err?.code === "PROFILE_REQUIRED") {
-                          navigate("/customer/profile");
                         }
                       }
                     }}

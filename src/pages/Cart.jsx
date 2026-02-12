@@ -52,26 +52,6 @@ export default function Cart() {
     );
   }
 
-  if (!customer?.profile_complete) {
-    return (
-      <div className="cart-page">
-        <CustomerNavbar />
-        <div className="cart-wrapper">
-          <div className="cart-empty">
-            Please complete your profile to use the cart.
-            <button
-              className="cart-cta"
-              type="button"
-              onClick={() => navigate("/customer/profile")}
-            >
-              Complete Profile
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   const subtotal = cart.reduce((sum, item) => {
     const price = item.has_offer ? item.discounted_price : item.price;
     return sum + Number(price || 0) * Number(item.quantity || 0);
@@ -122,9 +102,6 @@ export default function Cart() {
                                 navigate("/customer/login");
                                 return;
                               }
-                              if (err?.code === "PROFILE_REQUIRED") {
-                                navigate("/customer/profile");
-                              }
                             }
                           )
                         }
@@ -139,9 +116,6 @@ export default function Cart() {
                             if (err?.code === "AUTH_REQUIRED") {
                               navigate("/customer/login");
                               return;
-                            }
-                            if (err?.code === "PROFILE_REQUIRED") {
-                              navigate("/customer/profile");
                             }
                           })
                         }
@@ -160,9 +134,6 @@ export default function Cart() {
                           if (err?.code === "AUTH_REQUIRED") {
                             navigate("/customer/login");
                             return;
-                          }
-                          if (err?.code === "PROFILE_REQUIRED") {
-                            navigate("/customer/profile");
                           }
                         })
                       }
@@ -195,12 +166,6 @@ export default function Cart() {
               onClick={() => {
                 if (!customer?.authenticated) {
                   navigate("/customer/login", {
-                    state: { redirectTo: "/checkout" },
-                  });
-                  return;
-                }
-                if (!customer?.profile_complete) {
-                  navigate("/customer/profile", {
                     state: { redirectTo: "/checkout" },
                   });
                   return;

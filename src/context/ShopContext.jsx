@@ -95,11 +95,6 @@ export function ShopProvider({ children }) {
       err.code = "AUTH_REQUIRED";
       throw err;
     }
-    if (!customer?.profile_complete) {
-      const err = new Error("PROFILE_REQUIRED");
-      err.code = "PROFILE_REQUIRED";
-      throw err;
-    }
 
     const wasWishlisted = wishlistIds.has(productId);
     const prevWishlist = wishlist;
@@ -135,11 +130,6 @@ export function ShopProvider({ children }) {
       err.code = "AUTH_REQUIRED";
       throw err;
     }
-    if (!customer?.profile_complete) {
-      const err = new Error("PROFILE_REQUIRED");
-      err.code = "PROFILE_REQUIRED";
-      throw err;
-    }
     await api.post("cart/add/", { product_id: productId, quantity });
     await refreshCart();
   };
@@ -151,11 +141,6 @@ export function ShopProvider({ children }) {
       err.code = "AUTH_REQUIRED";
       throw err;
     }
-    if (!customer?.profile_complete) {
-      const err = new Error("PROFILE_REQUIRED");
-      err.code = "PROFILE_REQUIRED";
-      throw err;
-    }
     await api.put("cart/update/", { product_id: productId, quantity });
     await refreshCart();
   };
@@ -165,11 +150,6 @@ export function ShopProvider({ children }) {
     if (!customer?.authenticated) {
       const err = new Error("AUTH_REQUIRED");
       err.code = "AUTH_REQUIRED";
-      throw err;
-    }
-    if (!customer?.profile_complete) {
-      const err = new Error("PROFILE_REQUIRED");
-      err.code = "PROFILE_REQUIRED";
       throw err;
     }
     await api.delete(`cart/remove/${productId}/`);

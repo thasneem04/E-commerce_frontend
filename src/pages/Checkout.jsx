@@ -48,6 +48,11 @@ export default function Checkout() {
       navigate("/customer/login");
       return;
     }
+    if (!customer?.profile_complete) {
+      const target = productId ? `/checkout?productId=${productId}` : "/checkout";
+      navigate("/customer/profile", { state: { redirectTo: target } });
+      return;
+    }
     const profileReq = api.get("customer/profile/").catch(() => null);
     if (productId) {
       Promise.all([api.get(`products/${productId}/`), profileReq])

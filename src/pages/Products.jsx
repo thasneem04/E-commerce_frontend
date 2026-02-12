@@ -259,9 +259,6 @@ export default function Products() {
                             navigate("/customer/login");
                             return;
                           }
-                          if (err?.code === "PROFILE_REQUIRED") {
-                            navigate("/customer/profile");
-                          }
                         }
                       }}
                       aria-label="Add to cart"
