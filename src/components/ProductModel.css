@@ -54,6 +54,16 @@ form {
   font-size: 14px;
 }
 
+.field textarea {
+  border: none;
+  outline: none;
+  width: 100%;
+  background: transparent;
+  font-size: 14px;
+  resize: vertical;
+  min-height: 70px;
+}
+
 /* Upload */
 .upload {
   display: flex;

@@ -234,6 +234,9 @@ export default function Products() {
                   </div>
                   <div className="product-info">
                     <div className="product-name">{p.name}</div>
+                    {p.description && (
+                      <div className="product-desc">{p.description}</div>
+                    )}
                     <div className="product-price">
                       <span className="selling">{formatPrice(selling)}</span>
                       {p.has_offer && (

@@ -3,6 +3,7 @@ import {
   X,
   Save,
   Tag,
+  FileText,
   IndianRupee,
   Boxes,
   ImagePlus,
@@ -24,6 +25,7 @@ export default function ProductModel({ onClose, onSaved, product }) {
     original_price: "",
     offer_price: "",
     stock: "",
+    description: "",
     is_active: true,
     size_variants: [],
   });
@@ -40,6 +42,7 @@ export default function ProductModel({ onClose, onSaved, product }) {
         original_price: product.original_price,
         offer_price: product.offer_price || "",
         stock: product.stock,
+        description: product.description || "",
         is_active: product.is_active,
         size_variants: Array.isArray(product.size_variants)
           ? product.size_variants.map((v, index) => ({
@@ -135,6 +138,7 @@ export default function ProductModel({ onClose, onSaved, product }) {
       formData.append("original_price", form.original_price);
       formData.append("offer_price", form.offer_price || "");
       formData.append("stock", form.stock);
+      formData.append("description", form.description || "");
       formData.append("is_active", form.is_active);
       formData.append(
         "size_variants_payload",
@@ -259,6 +263,17 @@ export default function ProductModel({ onClose, onSaved, product }) {
               value={form.stock}
               onChange={handleChange}
               required
+            />
+          </div>
+
+          <div className="field">
+            <FileText size={16} />
+            <textarea
+              name="description"
+              placeholder="Product description"
+              value={form.description}
+              onChange={handleChange}
+              rows={3}
             />
           </div>
 

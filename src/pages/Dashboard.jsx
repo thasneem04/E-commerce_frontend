@@ -393,6 +393,10 @@ export default function Dashboard() {
                   <span>{p.name}</span>
                 </h3>
 
+                {p.description && (
+                  <p className="card-desc">{p.description}</p>
+                )}
+
                 <span className="category icon-text">
                   <Tag size={14} />
                   <span>{p.category_name}</span>
