@@ -10,6 +10,10 @@ import {
 } from "lucide-react";
 import { getPublicOffers } from "../api/offerApi";
 import { resolveMediaUrl } from "../utils/media";
+import grabLatest from "../assets/grab_our_latest_products.png";
+import cookwarePromo from "../assets/All_50_Off_1.png";
+import appliancesPromo from "../assets/All.png";
+import lionPromo from "../assets/li.png";
 import "./CustomerLanding.css";
 
 export default function CustomerLanding() {
@@ -62,6 +66,37 @@ export default function CustomerLanding() {
     setActiveIndex(0);
   }, [offers.length]);
 
+  useEffect(() => {
+    const revealNodes = document.querySelectorAll(".scroll-reveal");
+    if (!revealNodes.length) return;
+
+    if (
+      !("IntersectionObserver" in window) ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      revealNodes.forEach((node) => node.classList.add("is-visible"));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.2,
+        rootMargin: "0px 0px -8% 0px",
+      }
+    );
+
+    revealNodes.forEach((node) => observer.observe(node));
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="customer-page">
       <CustomerNavbar />
@@ -90,6 +125,10 @@ export default function CustomerLanding() {
               <li>
                 <Wallet size={18} />
                 <span>Affordable daily essentials</span>
+              </li>
+              <li>
+                <ShoppingBag size={18} />
+                <span>Free shipping throughout India</span>
               </li>
             </ul>
 
@@ -202,6 +241,122 @@ export default function CustomerLanding() {
                 </div>
               )}
             </div>
+          </div>
+        </div>
+        <div className="scroll-hint">Scroll down to know more about us</div>
+      </section>
+
+      <section className="logo-intro">
+        <div className="logo-intro-inner">
+          <div className="logo-stage scroll-reveal reveal-left">
+            <div className="logo-halo" />
+            <div className="logo-orbit" />
+            <div className="logo-orbit orbit-2" />
+            <div className="logo-card">
+              <img src="/MrLionLogoFinal.png" alt="VasanthaMaaligai logo" />
+            </div>
+          </div>
+          <div className="logo-copy scroll-reveal reveal-right">
+            <p className="logo-eyebrow">A MARK OF TRUST &amp; TRADITION</p>
+            <h2>Premium Stainless Steel Vessels Crafted for Generations</h2>
+            <p>
+              At VasanthaMaaligai, we bring you a curated collection of high-quality
+              kitchen vessels designed to combine strength, elegance, and long-lasting
+              performance. Every product reflects our commitment to durability, safety,
+              and timeless craftsmanship.
+            </p>
+            <p>
+              From everyday cooking essentials to premium serving pieces, our vessels
+              are built to withstand daily use while maintaining their shine and
+              structure for years.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="latest-products">
+        <div className="latest-inner">
+          <div className="latest-panel scroll-reveal reveal-left">
+            <div className="latest-panel-title">FEATURED PRODUCT</div>
+            <div className="featured-media">
+              <img src={grabLatest} alt="Featured product" />
+            </div>
+            <div className="featured-name">Premium Kitchen Essentials</div>
+            <div className="featured-desc">
+              Crafted for durability and elegance, designed to elevate everyday
+              cooking.
+            </div>
+            <Link to="/products" className="latest-cta primary">
+              <ShoppingBag size={16} />
+              Shop Now
+            </Link>
+          </div>
+          <div className="latest-card scroll-reveal reveal-right">
+            <h3>Discover Our Premium Collection</h3>
+            <Link to="/products" className="latest-cta secondary">
+              <ShoppingBag size={16} />
+              Shop Now
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="cookware-feature">
+        <div className="cookware-feature-inner">
+          <div className="cookware-feature-media scroll-reveal reveal-left">
+            <img src={cookwarePromo} alt="Cookware offer" />
+          </div>
+          <div className="cookware-feature-content scroll-reveal reveal-right">
+            <p className="cookware-kicker">VasanthaMaaligai</p>
+            <h2>COOKWARE</h2>
+            <p>
+              Explore top-notch cookware in Erode for an elevated culinary
+              journey. From non-stick pans to stylish stainless steel, our
+              collection blends durability with elegance, making every meal a
+              masterpiece.
+            </p>
+            <Link to="/products" className="cookware-btn">
+              COOKWARE OFFERS
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="appliances-feature">
+        <div className="appliances-feature-inner">
+          <div className="appliances-feature-content scroll-reveal reveal-left">
+            <p className="cookware-kicker">VasanthaMaaligai</p>
+            <h2>APPLIANCES</h2>
+            <p>
+              Upgrade your kitchen with cutting-edge appliances in Erode. From
+              efficient blenders to advanced coffee makers, our collection
+              combines technology and style for a seamless culinary experience.
+              Transform your kitchen into a hub of innovation.
+            </p>
+            <Link to="/products" className="cookware-btn">
+              BUY NOW
+            </Link>
+          </div>
+          <div className="appliances-feature-media scroll-reveal reveal-right">
+            <img src={appliancesPromo} alt="Appliances offer" />
+          </div>
+        </div>
+      </section>
+
+      <section className="cookware-feature lion-feature">
+        <div className="cookware-feature-inner">
+          <div className="cookware-feature-media scroll-reveal reveal-left">
+            <img src={lionPromo} alt="Mr.Lion offer" />
+          </div>
+          <div className="cookware-feature-content scroll-reveal reveal-right">
+            <p className="cookware-kicker">VasanthaMaaligai</p>
+            <h2>MR.LION</h2>
+            <p>
+              Discover the essence of quality and innovation with Mr.Lion. Our
+              stylish cookware and cutting-edge kitchen appliances redefine
+              culinary excellence, ensuring each moment in your kitchen is a
+              roar of sophistication. Elevate your experience with Mr.Lion.
+            </p>
           </div>
         </div>
       </section>
