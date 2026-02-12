@@ -69,7 +69,7 @@ export default function CustomerProfile() {
         <div className="profile-card">
           <h2>Complete Your Profile</h2>
           <p>
-            Please fill all fields before adding to cart, wishlist, or buying.
+            Please fill all fields before placing an order.
           </p>
           <form onSubmit={handleSubmit}>
             <input
