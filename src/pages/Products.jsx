@@ -234,17 +234,6 @@ export default function Products() {
                   </div>
                   <div className="product-info">
                     <div className="product-name">{p.name}</div>
-                    {Array.isArray(p.size_variants) && p.size_variants.length > 0 && (
-                      <div className="product-sizes">
-                        {p.size_variants
-                          .filter((v) => v.is_active !== false)
-                          .map((v) => (
-                            <span key={v.id} className="size-chip">
-                              {v.size_label}
-                            </span>
-                          ))}
-                      </div>
-                    )}
                     <div className="product-price">
                       <span className="selling">{formatPrice(selling)}</span>
                       {p.has_offer && (
