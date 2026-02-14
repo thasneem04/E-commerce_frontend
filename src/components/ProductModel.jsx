@@ -18,6 +18,7 @@ export default function ProductModel({ onClose, onSaved, product }) {
   const [categories, setCategories] = useState([]);
   const [images, setImages] = useState([]);
   const [existingImages, setExistingImages] = useState([]);
+  const [replaceImages, setReplaceImages] = useState(false);
   const [saving, setSaving] = useState(false);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
 
@@ -40,6 +41,7 @@ export default function ProductModel({ onClose, onSaved, product }) {
     if (product) {
       setImages([]);
       setExistingImages(Array.isArray(product.extra_images) ? product.extra_images : []);
+      setReplaceImages(false);
       setForm({
         name: product.name,
         category: product.category,
@@ -194,6 +196,9 @@ export default function ProductModel({ onClose, onSaved, product }) {
       }
       if (images.length > 0) {
         images.forEach((file) => formData.append("images", file));
+      }
+      if (product && replaceImages) {
+        formData.append("replace_images", "true");
       }
 
       if (product) {
@@ -418,6 +423,16 @@ export default function ProductModel({ onClose, onSaved, product }) {
                 </div>
               ))}
             </div>
+          )}
+          {product && (
+            <label className="checkbox">
+              <input
+                type="checkbox"
+                checked={replaceImages}
+                onChange={(e) => setReplaceImages(e.target.checked)}
+              />
+              Replace existing gallery images
+            </label>
           )}
 
           {/* Active */}
