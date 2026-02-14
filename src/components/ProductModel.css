@@ -40,6 +40,8 @@ form {
   overflow-y: auto;
   padding-right: 6px;
   scrollbar-gutter: stable;
+
+  padding-bottom: 16px;
 }
 
 /* Input with icon */
@@ -244,6 +246,7 @@ form {
   cursor: pointer;
   font-weight: 500;
   transition: all 0.3s ease;
+  margin-bottom: 6px;
 }
 
 /* when loading */
