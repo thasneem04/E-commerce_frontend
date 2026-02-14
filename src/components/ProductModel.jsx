@@ -97,6 +97,24 @@ export default function ProductModel({ onClose, onSaved, product }) {
     }));
   };
 
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+    setImages((prev) => {
+      const map = new Map();
+      [...prev, ...files].forEach((file) => {
+        const key = `${file.name}-${file.size}-${file.lastModified}`;
+        map.set(key, file);
+      });
+      return Array.from(map.values());
+    });
+    e.target.value = "";
+  };
+
+  const removeImageAt = (index) => {
+    setImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
@@ -336,19 +354,36 @@ export default function ProductModel({ onClose, onSaved, product }) {
           {/* Image */}
           <label className="upload">
             <ImagePlus size={16} />
-          <span>
-            {images.length > 0
-              ? `${images.length} image${images.length > 1 ? "s" : ""} selected`
-              : "Upload images"}
-          </span>
-          <input
-            type="file"
-            accept="image/*"
-            hidden
-            multiple
-            onChange={(e) => setImages(Array.from(e.target.files || []))}
-          />
-        </label>
+            <span>
+              {images.length > 0
+                ? `${images.length} image${images.length > 1 ? "s" : ""} selected`
+                : "Upload images"}
+            </span>
+            <input
+              type="file"
+              accept="image/*"
+              hidden
+              multiple
+              onChange={handleImageChange}
+            />
+          </label>
+          {images.length > 0 && (
+            <div className="image-list">
+              {images.map((file, index) => (
+                <div className="image-chip" key={`${file.name}-${file.lastModified}`}>
+                  <span>{file.name}</span>
+                  <button
+                    type="button"
+                    className="icon-btn"
+                    onClick={() => removeImageAt(index)}
+                    aria-label={`Remove ${file.name}`}
+                  >
+                    <X size={14} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
 
           {/* Active */}
           <label className="checkbox">
