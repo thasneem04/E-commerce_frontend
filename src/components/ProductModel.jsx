@@ -19,6 +19,7 @@ export default function ProductModel({ onClose, onSaved, product }) {
   const [images, setImages] = useState([]);
   const [existingImages, setExistingImages] = useState([]);
   const [replaceImages, setReplaceImages] = useState(false);
+  const [confirmImageId, setConfirmImageId] = useState(null);
   const [saving, setSaving] = useState(false);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
 
@@ -42,6 +43,7 @@ export default function ProductModel({ onClose, onSaved, product }) {
       setImages([]);
       setExistingImages(Array.isArray(product.extra_images) ? product.extra_images : []);
       setReplaceImages(false);
+      setConfirmImageId(null);
       setForm({
         name: product.name,
         category: product.category,
@@ -122,7 +124,6 @@ export default function ProductModel({ onClose, onSaved, product }) {
 
   const removeExistingImage = async (imageId) => {
     if (!imageId) return;
-    if (!confirm("Remove this image?")) return;
     try {
       await api.delete(`products/images/${imageId}/`);
       setExistingImages((prev) => prev.filter((img) => img.id !== imageId));
@@ -132,6 +133,8 @@ export default function ProductModel({ onClose, onSaved, product }) {
         JSON.stringify(err?.response?.data || {}) ||
         "Delete failed";
       alert(message);
+    } finally {
+      setConfirmImageId(null);
     }
   };
 
@@ -415,7 +418,7 @@ export default function ProductModel({ onClose, onSaved, product }) {
                   <button
                     type="button"
                     className="icon-btn"
-                    onClick={() => removeExistingImage(img.id)}
+                    onClick={() => setConfirmImageId(img.id)}
                     aria-label="Delete image"
                   >
                     <X size={14} />
@@ -463,6 +466,32 @@ export default function ProductModel({ onClose, onSaved, product }) {
             api.get("categories/").then((res) => setCategories(res.data));
           }}
         />
+      )}
+      {confirmImageId && (
+        <div className="confirm-backdrop" role="dialog" aria-modal="true">
+          <div className="confirm-card">
+            <div className="confirm-title">Remove image?</div>
+            <div className="confirm-text">
+              This image will be removed from the gallery.
+            </div>
+            <div className="confirm-actions">
+              <button
+                type="button"
+                className="confirm-btn ghost"
+                onClick={() => setConfirmImageId(null)}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="confirm-btn danger"
+                onClick={() => removeExistingImage(confirmImageId)}
+              >
+                Remove
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
