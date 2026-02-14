@@ -100,6 +100,38 @@ form {
   white-space: nowrap;
 }
 
+.existing-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.existing-image {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #e5d6c7;
+  background: #fff;
+}
+
+.existing-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.existing-image .icon-btn {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 999px;
+  padding: 2px;
+}
+
 /* Checkbox */
 .checkbox {
   display: flex;

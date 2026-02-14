@@ -12,10 +12,12 @@ import {
 import api from "../api/apis";
 import "./ProductModel.css";
 import CategoryModel from "./CategoryModel";
+import { resolveMediaUrl } from "../utils/media";
 
 export default function ProductModel({ onClose, onSaved, product }) {
   const [categories, setCategories] = useState([]);
   const [images, setImages] = useState([]);
+  const [existingImages, setExistingImages] = useState([]);
   const [saving, setSaving] = useState(false);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
 
@@ -37,6 +39,7 @@ export default function ProductModel({ onClose, onSaved, product }) {
   useEffect(() => {
     if (product) {
       setImages([]);
+      setExistingImages(Array.isArray(product.extra_images) ? product.extra_images : []);
       setForm({
         name: product.name,
         category: product.category,
@@ -113,6 +116,21 @@ export default function ProductModel({ onClose, onSaved, product }) {
 
   const removeImageAt = (index) => {
     setImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const removeExistingImage = async (imageId) => {
+    if (!imageId) return;
+    if (!confirm("Remove this image?")) return;
+    try {
+      await api.delete(`products/images/${imageId}/`);
+      setExistingImages((prev) => prev.filter((img) => img.id !== imageId));
+    } catch (err) {
+      const message =
+        err?.response?.data?.detail ||
+        JSON.stringify(err?.response?.data || {}) ||
+        "Delete failed";
+      alert(message);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -377,6 +395,23 @@ export default function ProductModel({ onClose, onSaved, product }) {
                     className="icon-btn"
                     onClick={() => removeImageAt(index)}
                     aria-label={`Remove ${file.name}`}
+                  >
+                    <X size={14} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+          {existingImages.length > 0 && (
+            <div className="existing-images">
+              {existingImages.map((img) => (
+                <div className="existing-image" key={img.id}>
+                  <img src={resolveMediaUrl(img.image)} alt="Product" />
+                  <button
+                    type="button"
+                    className="icon-btn"
+                    onClick={() => removeExistingImage(img.id)}
+                    aria-label="Delete image"
                   >
                     <X size={14} />
                   </button>
