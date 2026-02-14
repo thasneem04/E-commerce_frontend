@@ -15,7 +15,7 @@ import CategoryModel from "./CategoryModel";
 
 export default function ProductModel({ onClose, onSaved, product }) {
   const [categories, setCategories] = useState([]);
-  const [image, setImage] = useState(null);
+  const [images, setImages] = useState([]);
   const [saving, setSaving] = useState(false);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
 
@@ -36,6 +36,7 @@ export default function ProductModel({ onClose, onSaved, product }) {
 
   useEffect(() => {
     if (product) {
+      setImages([]);
       setForm({
         name: product.name,
         category: product.category,
@@ -155,7 +156,9 @@ export default function ProductModel({ onClose, onSaved, product }) {
           )
         );
       }
-      if (image) formData.append("image", image);
+      if (images.length > 0) {
+        images.forEach((file) => formData.append("images", file));
+      }
 
       if (product) {
         await api.put(`products/${product.id}/`, formData);
@@ -333,14 +336,19 @@ export default function ProductModel({ onClose, onSaved, product }) {
           {/* Image */}
           <label className="upload">
             <ImagePlus size={16} />
-            <span>{image ? image.name : "Upload image"}</span>
-            <input
-              type="file"
-              accept="image/*"
-              hidden
-              onChange={(e) => setImage(e.target.files[0])}
-            />
-          </label>
+          <span>
+            {images.length > 0
+              ? `${images.length} image${images.length > 1 ? "s" : ""} selected`
+              : "Upload images"}
+          </span>
+          <input
+            type="file"
+            accept="image/*"
+            hidden
+            multiple
+            onChange={(e) => setImages(Array.from(e.target.files || []))}
+          />
+        </label>
 
           {/* Active */}
           <label className="checkbox">

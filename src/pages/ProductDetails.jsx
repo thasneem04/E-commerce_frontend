@@ -47,7 +47,14 @@ export default function ProductDetails() {
   const images = useMemo(() => {
     if (!product) return [];
     const base = product.image ? [product.image] : [];
-    return base;
+    const extra = Array.isArray(product.images) ? product.images : [];
+    const all = [...base, ...extra].filter(Boolean);
+    const seen = new Set();
+    return all.filter((img) => {
+      if (seen.has(img)) return false;
+      seen.add(img);
+      return true;
+    });
   }, [product]);
 
   useEffect(() => {
@@ -66,7 +73,10 @@ export default function ProductDetails() {
       .then((res) => {
         if (!mounted) return;
         setProduct(res.data);
-        const firstImage = res.data?.image || "";
+        const base = res.data?.image ? [res.data.image] : [];
+        const extra = Array.isArray(res.data?.images) ? res.data.images : [];
+        const merged = [...base, ...extra].filter(Boolean);
+        const firstImage = merged[0] || "";
         setSelectedImage(firstImage);
         const variants = Array.isArray(res.data?.size_variants)
           ? res.data.size_variants.filter((v) => v.is_active !== false)
