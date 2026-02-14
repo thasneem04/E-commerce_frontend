@@ -265,6 +265,9 @@ form {
   border-top-color: #fff;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
+  display: inline-block;
+  flex: 0 0 18px;
+  box-sizing: border-box;
 }
 
 @keyframes spin {
